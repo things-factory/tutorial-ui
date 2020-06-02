@@ -1,0 +1,20 @@
+{
+  "field.description": "description",
+  "field.duration": "duration",
+  "field.license": "license",
+  "field.name": "name",
+  "field.rank": "rank",
+  "field.role": "role",
+  "field.system brief": "system brief",
+  "field.resource_url": "url",
+  "field.value": "value",
+  "field.version": "version",
+  "label.assigned": "assigned",
+  "label.description": "description",
+  "label.name": "name",
+  "label.tutorial": "tutorial",
+  "text.tutorial_detail_updated": "tutorial detail updated",
+  "title.role": "role",
+  "title.tutorial": "tutorial",
+  "title.tutorial_detail": "tutorial detail"
+}

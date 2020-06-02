@@ -1,0 +1,14 @@
+body {
+  /* tutorial style */
+  --tutorial-background-color: var(--main-section-background-color);
+  --tutorial-content-padding: 40px 0 0 0;
+  --tutorial-font: normal 14px/24px var(--theme-font);
+  --tutorial-color: #666;
+  --tutorial-appname-color: var(--secondary-color);
+  --tutorial-appname-font: bold 20px/20px var(--theme-font);
+  --tutorial-description-color: var(--primary-color);
+  --tutorial-description-font: normal 15px/18px var(--theme-font);
+  --tutorial-version-background-color: var(--secondary-color);
+  --tutorial-version-color: #fff;
+  --tutorial-version-font: normal 15px/15px var(--theme-font);
+}

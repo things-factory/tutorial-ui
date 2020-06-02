@@ -1,0 +1,20 @@
+{
+  "field.description": "description",
+  "field.duration": "duration",
+  "field.license": "lesen",
+  "field.name": "nama",
+  "field.rank": "rank",
+  "field.role": "role",
+  "field.system brief": "ringkasan sistem",
+  "field.resource_url": "url",
+  "field.value": "value",
+  "field.version": "versi",
+  "label.assigned": "assigned",
+  "label.description": "description",
+  "label.name": "nama",
+  "label.tutorial": "tutorial",
+  "text.tutorial_detail_updated": "tutorial detail updated",
+  "title.role": "role",
+  "title.tutorial": "tutorial",
+  "title.tutorial_detail": "tutorial detail"
+}

@@ -1,0 +1,20 @@
+{
+  "field.description": "description",
+  "field.duration": "duration",
+  "field.license": "执照",
+  "field.name": "name",
+  "field.rank": "rank",
+  "field.role": "role",
+  "field.system brief": "系统简介",
+  "field.resource_url": "url",
+  "field.value": "value",
+  "field.version": "版本",
+  "label.assigned": "assigned",
+  "label.description": "description",
+  "label.name": "name",
+  "label.tutorial": "tutorial",
+  "text.tutorial_detail_updated": "tutorial detail updated",
+  "title.role": "role",
+  "title.tutorial": "tutorial",
+  "title.tutorial_detail": "tutorial detail"
+}
