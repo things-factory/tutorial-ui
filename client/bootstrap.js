@@ -10,10 +10,10 @@ export default function bootstrap() {
   store.dispatch({
     type: ADD_MORENDA,
     morenda: {
-      icon: html` <mwc-icon>tutorial</mwc-icon> `,
+      icon: html` <mwc-icon>book</mwc-icon> `,
       name: html` <i18n-msg msgid="label.tutorial"></i18n-msg> `,
       action: () => {
-        navigate("tutorial_setting");
+        navigate("tutorial_list");
       },
     },
   });

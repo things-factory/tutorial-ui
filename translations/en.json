@@ -14,6 +14,8 @@
   "label.name": "name",
   "label.tutorial": "tutorial",
   "text.tutorial_detail_updated": "tutorial detail updated",
+  "title.name": "name",
+  "title.description": "description",
   "title.role": "role",
   "title.tutorial": "tutorial",
   "title.tutorial_detail": "tutorial detail"
