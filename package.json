@@ -1,11 +1,11 @@
 {
   "name": "@things-factory/tutorial-ui",
-  "version": "0.1.25",
+  "version": "2.5.1",
   "main": "dist-server/index.js",
   "browser": "client/index.js",
   "things-factory": true,
   "license": "MIT",
-  "author": "heartyoh",
+  "author": "joekin",
   "scripts": {
     "serve": "things-factory",
     "serve:dev": "npm run build:server && things-factory-dev",
@@ -27,7 +27,7 @@
     "@things-factory/layout-base": "*",
     "@things-factory/more-base": "*",
     "@things-factory/shell": "*",
-    "@things-factory/tutorial-base": "*"
+    "@things-factory/tutorial-base": "^2.5.0"
   },
   "devDependencies": {
     "@things-factory/tester": "*"
