@@ -1,14 +1,67 @@
 body {
   /* tutorial style */
+  --tutorial-title-font: 600 1.5em/1.2em var(--theme-font);
+  --tutorial-header-field-padding: 0 5px 2px 5px;
+  --tutorial-header-field-font: normal 1.1em/1.1em var(--theme-font);
+
+  --tutorial-grid-template: repeat(5, minmax(250px, 350px));
+  --tutorial-grid-gap: 15px;
+
+  --tutorial-item-name-font: 700 14px var(--theme-font);
+  --tutorial-item-description-font: normal 13px var(--theme-font);
+
+  /* Check the required items and organize them */
   --tutorial-background-color: var(--main-section-background-color);
   --tutorial-content-padding: 40px 0 0 0;
   --tutorial-font: normal 14px/24px var(--theme-font);
   --tutorial-color: #666;
+
   --tutorial-appname-color: var(--secondary-color);
   --tutorial-appname-font: bold 20px/20px var(--theme-font);
   --tutorial-description-color: var(--primary-color);
-  --tutorial-description-font: normal 15px/18px var(--theme-font);
+  --tutorial-description-font: normal 1em/1.1em var(--theme-font);
   --tutorial-version-background-color: var(--secondary-color);
   --tutorial-version-color: #fff;
   --tutorial-version-font: normal 15px/15px var(--theme-font);
+}
+
+@media only screen and (max-width: 550px) {
+  body {
+    --tutorial-grid-template: repeat(1, minmax(auto, auto));
+  }
+}
+@media (min-width: 551px) and (max-width: 900px) {
+  body {
+    --tutorial-grid-template: repeat(2, minmax(200px, auto));
+  }
+}
+@media (min-width: 901px) and (max-width: 1200px) {
+  body {
+    --tutorial-grid-template: repeat(3, minmax(200px, auto));
+  }
+}
+@media (min-width: 1201px) and (max-width: 1600px) {
+  body {
+    --tutorial-grid-template: repeat(4, minmax(200px, auto));
+  }
+}
+@media (min-width: 1901px) and (max-width: 2350px) {
+  body {
+    --tutorial-grid-template: repeat(6, minmax(auto, auto));
+  }
+}
+@media (min-width: 2351px) and (max-width: 2800px) {
+  body {
+    --tutorial-grid-template: repeat(7, minmax(auto, auto));
+  }
+}
+@media (min-width: 2891px) and (max-width: 3500px) {
+  body {
+    --tutorial-grid-template: repeat(10, minmax(auto, auto));
+  }
+}
+@media (min-width: 3501px) {
+  body {
+    --tutorial-grid-template: repeat(12, minmax(auto, auto));
+  }
 }
