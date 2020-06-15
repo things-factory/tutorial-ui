@@ -1,3 +1,4 @@
+import { getCodeByName } from "@things-factory/code-base";
 import { css, html } from "lit-element";
 import { connect } from "pwa-helpers/connect-mixin.js";
 import { i18next, localize } from "@things-factory/i18n-base";
@@ -18,6 +19,8 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
     return {
       _searchFields: Array,
       tutorialVideos: Array,
+      roleNameList: Array,
+      roleId: String,
     };
   }
 
@@ -113,18 +116,20 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
 
   render() {
     return html`
-      <!--search-form
-        id="search-form"
-        .fields=${this._searchFields}
-        @submit=${this.fetchHandler.bind(this)}
-      ></search-form-->
       <div class="tutorial-page-header">
-        <h2>OPERATO tutorials title</h2>
-        <p>operato tutorial descrition message..</p>
-        <select>
-          <option>for warehouse customer</option>
-          <option>for warehouse manager</option>
-          <option>for warehouse operator</option>
+        <h2>OPERATO WMS tutorials</h2>
+        <p>Guide Of Modules</p>
+        <select id="role_list" @change="${this.onChange}">
+          ${!this.roleNameList || this.roleNameList.length == 0
+            ? html` <option></option> `
+            : this.roleNameList.map(
+                (roleNameList) =>
+                  html`
+                    <option value="${roleNameList.id}"
+                      >${roleNameList.name}</option
+                    >
+                  `
+              )}
         </select>
       </div>
 
@@ -150,39 +155,48 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
   }
 
   async pageInitialized() {
-    this._searchFields = [
-      {
-        name: "name",
-        label: i18next.t("title.name"),
-        type: "text",
-        props: {
-          searchOper: "i_like",
-        },
-      },
-      {
-        name: "description",
-        label: i18next.t("title.description"),
-        type: "text",
-        props: {
-          searchOper: "i_like",
-        },
-      },
-    ];
-
+    await this.fetchRoleListHandler();
     await this.fetchHandler();
   }
 
-  get searchForm() {
-    return this.shadowRoot.querySelector("search-form");
+  get roleList() {
+    return this.shadowRoot.querySelector("#role_list");
+  }
+
+  // onChange(){
+  //   console.log("hello")
+  // }
+
+  async onChange() {
+    //   this.userTypeName = this.shadowRoot.querySelector("#user_type_list").value;
+    await this.fetchHandler();
+  }
+
+  async fetchRoleListHandler() {
+    let filters = [];
+    const response = await client.query({
+      query: gql`
+        query {
+          roleNameList: listByRoles(${gqlBuilder.buildArgs({
+            filters,
+          })}) {
+            id
+            name
+          }
+        }
+      `,
+    });
+
+    this.roleNameList = [...response.data.roleNameList];
   }
 
   async fetchHandler() {
-    let filters = this?.searchForm?.queryFilters || [];
+    let roleId = this.roleList.value;
     const response = await client.query({
       query: gql`
         query {
           tutorialVideos: tutorialsWithRoles(${gqlBuilder.buildArgs({
-            filters,
+            roleId,
           })}) {
             id
             name
