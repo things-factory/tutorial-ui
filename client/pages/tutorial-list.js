@@ -1,7 +1,7 @@
-import { getCodeByName } from "@things-factory/code-base";
 import { css, html } from "lit-element";
 import { connect } from "pwa-helpers/connect-mixin.js";
 import { i18next, localize } from "@things-factory/i18n-base";
+import { getCodeByName } from "@things-factory/code-base";
 import {
   client,
   CustomAlert,
@@ -21,6 +21,9 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
       tutorialVideos: Array,
       roleNameList: Array,
       roleId: String,
+      _user: String,
+      userRoles: Array,
+      userRole: String,
     };
   }
 
@@ -125,7 +128,7 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
             : this.roleNameList.map(
                 (roleNameList) =>
                   html`
-                    <option value="${roleNameList.id}"
+                    <option value="${roleNameList.name}"
                       >${roleNameList.name}</option
                     >
                   `
@@ -155,7 +158,11 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
   }
 
   async pageInitialized() {
-    await this.fetchRoleListHandler();
+    this.roleNameList = await getCodeByName("TUTORIAL_ROLES_PRIORITY");
+    //this.fetchRolesByName();
+    //await this.fetchRoleListHandler();
+    await this.fetchUserRoleHandler();
+    this.getRole();
     await this.fetchHandler();
   }
 
@@ -163,14 +170,11 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
     return this.shadowRoot.querySelector("#role_list");
   }
 
-  // onChange(){
-  //   console.log("hello")
-  // }
-
   async onChange() {
-    //   this.userTypeName = this.shadowRoot.querySelector("#user_type_list").value;
     await this.fetchHandler();
   }
+
+  fetchRolesByName() {}
 
   async fetchRoleListHandler() {
     let filters = [];
@@ -190,13 +194,31 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
     this.roleNameList = [...response.data.roleNameList];
   }
 
+  async fetchUserRoleHandler() {
+    const response = await client.query({
+      query: gql`
+        query {
+          userRoles: userRoles(${gqlBuilder.buildArgs({
+            userId: this._user,
+          })}) {
+            id
+            name
+            description
+            assigned
+          }
+        }
+      `,
+    });
+
+    this.userRoles = [...response.data.userRoles];
+  }
+
   async fetchHandler() {
-    let roleId = this.roleList.value;
     const response = await client.query({
       query: gql`
         query {
           tutorialVideos: tutorialsWithRoles(${gqlBuilder.buildArgs({
-            roleId,
+            roleNames: this.roleList.value || [],
           })}) {
             id
             name
@@ -211,6 +233,24 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
     });
 
     this.tutorialVideos = [...response.data.tutorialVideos];
+  }
+
+  getRole() {
+    this.userRoles
+      .filter((x) => x.assigned == true)
+      .map((itm) => {
+        let roleList = this.roleNameList.filter(
+          (x) => x.name == String(itm.name).toUpperCase()
+        )[0];
+        if (roleList) {
+          this.userRole = roleList.name;
+        }
+      });
+  }
+
+  stateChanged(state) {
+    if (state.auth.user)
+      this._user = state.auth && state.auth.user && state.auth.user.id;
   }
 
   //Filter youtube url to get video id
