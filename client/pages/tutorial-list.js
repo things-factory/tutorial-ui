@@ -120,7 +120,7 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
           ${!this.roleNameList || this.roleNameList.length == 0
             ? html` <option></option> `
             : this.roleNameList.map(
-                roleNameList => html` <option value="${roleNameList.name}">${roleNameList.name}</option> `
+                roleNameList => html` <option value="${roleNameList.description}">${roleNameList.name}</option> `
               )}
         </select>
       </div>
@@ -211,7 +211,7 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
       `
     })
 
-    this.tutorialVideos = [...response.data.tutorialVideos]
+    this.tutorialVideos = [...response.data.tutorialsWithRoles]
   }
 
   getRole() {
