@@ -1,18 +1,12 @@
-import { css, html } from "lit-element";
-import { connect } from "pwa-helpers/connect-mixin.js";
-import { i18next, localize } from "@things-factory/i18n-base";
-import { getCodeByName } from "@things-factory/code-base";
-import {
-  client,
-  CustomAlert,
-  PageView,
-  ScrollbarStyles,
-  store,
-} from "@things-factory/shell";
-import { gqlBuilder, isMobileDevice } from "@things-factory/utils";
-import gql from "graphql-tag";
-import "@things-factory/form-ui";
-import "@things-factory/grist-ui";
+import { getCodeByName } from '@things-factory/code-base'
+import '@things-factory/form-ui'
+import '@things-factory/grist-ui'
+import { i18next, localize } from '@things-factory/i18n-base'
+import { client, PageView, store } from '@things-factory/shell'
+import { gqlBuilder } from '@things-factory/utils'
+import gql from 'graphql-tag'
+import { css, html } from 'lit-element'
+import { connect } from 'pwa-helpers/connect-mixin.js'
 
 class TutorialList extends connect(store)(localize(i18next)(PageView)) {
   static get properties() {
@@ -23,8 +17,8 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
       roleId: String,
       _user: String,
       userRoles: Array,
-      userRole: String,
-    };
+      userRole: String
+    }
   }
 
   static get styles() {
@@ -35,7 +29,7 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
           background-color: var(--tutorial-background-color);
         }
         .tutorial-page-header {
-          background: url("../../assets/images/icon-tutorial.png") no-repeat;
+          background: url('../../assets/images/icon-tutorial.png') no-repeat;
           background-size: contain;
           margin-bottom: 20px;
           padding-left: 105px;
@@ -107,38 +101,33 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
           vertical-align: middle;
           font-size: 14px;
         }
-      `,
-    ];
+      `
+    ]
   }
 
   get context() {
     return {
-      title: i18next.t("title.tutorial"),
-    };
+      title: i18next.t('title.tutorial')
+    }
   }
 
   render() {
     return html`
       <div class="tutorial-page-header">
-        <h2>OPERATO WMS tutorials</h2>
-        <p>Guide Of Modules</p>
-        <select id="role_list" @change="${this.onChange}">
+        <h2>${i18next.t('title.operato_tutorials')}</h2>
+        <p>${i18next.t('text.guide_of_modules')}</p>
+        <select id="role_list" @change="${this.fetchHandler}">
           ${!this.roleNameList || this.roleNameList.length == 0
             ? html` <option></option> `
             : this.roleNameList.map(
-                (roleNameList) =>
-                  html`
-                    <option value="${roleNameList.name}"
-                      >${roleNameList.name}</option
-                    >
-                  `
+                roleNameList => html` <option value="${roleNameList.name}">${roleNameList.name}</option> `
               )}
         </select>
       </div>
 
       <div class="grid-container">
         ${!this.tutorialVideos || this.tutorialVideos.length == 0
-          ? html` <div nolist>No Tutorial is found</div> `
+          ? html` <div nolist>${i18next.t('text.no_tutorial_is_available')}</div> `
           : this.tutorialVideos.map(
               (item, idx) => html`
                 <a href=${item.resourceUrl} target="_blank">
@@ -146,52 +135,42 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
                     <img src="${this.getYoutubeThumbnail(item.resourceUrl)}" />
                     <span class="item-name">${item.name}</span>
                     <span class="item-description">${item.description}</span>
-                    <span class="item-duration"
-                      ><mwc-icon>schedule</mwc-icon> ${item.duration}</span
-                    >
+                    <span class="item-duration"><mwc-icon>schedule</mwc-icon> ${item.duration}</span>
                   </div>
                 </a>
               `
             )}
       </div>
-    `;
+    `
   }
 
   async pageInitialized() {
-    this.roleNameList = await getCodeByName("TUTORIAL_ROLES_PRIORITY");
-    //this.fetchRolesByName();
-    //await this.fetchRoleListHandler();
-    await this.fetchUserRoleHandler();
-    this.getRole();
-    await this.fetchHandler();
+    this.roleNameList = await getCodeByName('TUTORIAL_ROLES_PRIORITY')
+    await this.fetchUserRoleHandler()
+    this.getRole()
+    await this.fetchHandler()
   }
 
   get roleList() {
-    return this.shadowRoot.querySelector("#role_list");
+    return this.shadowRoot.querySelector('#role_list')
   }
-
-  async onChange() {
-    await this.fetchHandler();
-  }
-
-  fetchRolesByName() {}
 
   async fetchRoleListHandler() {
-    let filters = [];
+    let filters = []
     const response = await client.query({
       query: gql`
         query {
           roleNameList: listByRoles(${gqlBuilder.buildArgs({
-            filters,
+            filters
           })}) {
             id
             name
           }
         }
-      `,
-    });
+      `
+    })
 
-    this.roleNameList = [...response.data.roleNameList];
+    this.roleNameList = [...response.data.roleNameList]
   }
 
   async fetchUserRoleHandler() {
@@ -199,7 +178,7 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
       query: gql`
         query {
           userRoles: userRoles(${gqlBuilder.buildArgs({
-            userId: this._user,
+            userId: this._user
           })}) {
             id
             name
@@ -207,18 +186,18 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
             assigned
           }
         }
-      `,
-    });
+      `
+    })
 
-    this.userRoles = [...response.data.userRoles];
+    this.userRoles = [...response.data.userRoles]
   }
 
   async fetchHandler() {
     const response = await client.query({
       query: gql`
         query {
-          tutorialVideos: tutorialsWithRoles(${gqlBuilder.buildArgs({
-            roleNames: this.roleList.value || [],
+          tutorialsWithRoles(${gqlBuilder.buildArgs({
+            roleNames: this.roleList.value || []
           })}) {
             id
             name
@@ -229,53 +208,49 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
             rank
           }
         }
-      `,
-    });
+      `
+    })
 
-    this.tutorialVideos = [...response.data.tutorialVideos];
+    this.tutorialVideos = [...response.data.tutorialVideos]
   }
 
   getRole() {
     this.userRoles
-      .filter((x) => x.assigned == true)
-      .map((itm) => {
-        let roleList = this.roleNameList.filter(
-          (x) => x.name == String(itm.name).toUpperCase()
-        )[0];
+      .filter(x => x.assigned == true)
+      .map(itm => {
+        let roleList = this.roleNameList.filter(x => x.name == String(itm.name).toUpperCase())[0]
         if (roleList) {
-          this.userRole = roleList.name;
+          this.userRole = roleList.name
         }
-      });
+      })
   }
 
   stateChanged(state) {
-    if (state.auth.user)
-      this._user = state.auth && state.auth.user && state.auth.user.id;
+    if (state.auth.user) this._user = state.auth && state.auth.user && state.auth.user.id
   }
 
   //Filter youtube url to get video id
   getYoutubeThumbnail(link_url) {
-    var thumbnail_link = "";
-    var video_id = link_url.split("v=")[1];
-    var ampersandPosition = video_id.indexOf("&");
+    var thumbnail_link = ''
+    var video_id = link_url.split('v=')[1]
+    var ampersandPosition = video_id.indexOf('&')
     if (ampersandPosition != -1) {
-      video_id = video_id.substring(0, ampersandPosition);
+      video_id = video_id.substring(0, ampersandPosition)
     }
-    thumbnail_link =
-      "https://img.youtube.com/vi/" + video_id + "/hqdefault.jpg";
-    return thumbnail_link;
+    thumbnail_link = 'https://img.youtube.com/vi/' + video_id + '/hqdefault.jpg'
+    return thumbnail_link
   }
 
   _showToast({ type, message }) {
     document.dispatchEvent(
-      new CustomEvent("notify", {
+      new CustomEvent('notify', {
         detail: {
           type,
-          message,
-        },
+          message
+        }
       })
-    );
+    )
   }
 }
 
-window.customElements.define("tutorial-list", TutorialList);
+window.customElements.define('tutorial-list', TutorialList)

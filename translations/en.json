@@ -14,8 +14,11 @@
   "label.name": "name",
   "label.tutorial": "tutorial",
   "text.tutorial_detail_updated": "tutorial detail updated",
+  "text.guide_of_modules": "Guide of Modules",
+  "text.no_tutorial_is_available": "no tutorial is available",
   "title.name": "name",
   "title.description": "description",
+  "title.operato_tutorials": "operato tutorials",
   "title.role": "role",
   "title.tutorial": "tutorial",
   "title.tutorial_detail": "tutorial detail"
