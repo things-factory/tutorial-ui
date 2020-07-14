@@ -148,8 +148,6 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
   }
 
   async pageInitialized() {
-    //await this.fetchUserBizPlaceHandler()
-    //this.getBizplace()
     this.isUserBelongsDomain = await this._checkUserBelongsDomain()
     if (this.isUserBelongsDomain) {
       this.roleNameList = await getCodeByName('TUTORIAL_ROLES_PRIORITY')
