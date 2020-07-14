@@ -16,6 +16,9 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
       roleNameList: Array,
       roleId: String,
       _user: String,
+      isUserBelongsDomain: Boolean,
+      userBizplaces: Array,
+      userBizplace: String,
       userRoles: Array,
       userRole: String
     }
@@ -145,7 +148,15 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
   }
 
   async pageInitialized() {
-    this.roleNameList = await getCodeByName('TUTORIAL_ROLES_PRIORITY')
+    //await this.fetchUserBizPlaceHandler()
+    //this.getBizplace()
+    this.isUserBelongsDomain = await this._checkUserBelongsDomain()
+    if (this.isUserBelongsDomain) {
+      this.roleNameList = await getCodeByName('TUTORIAL_ROLES_PRIORITY')
+    } else {
+      this.roleNameList = await getCodeByName('TUTORIAL_ROLES_PRIORITY_CUSTOMER')
+    }
+
     await this.fetchUserRoleHandler()
     this.getRole()
     await this.fetchHandler()
@@ -192,12 +203,49 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
     this.userRoles = [...response.data.userRoles]
   }
 
+  async fetchUserBizPlaceHandler() {
+    const response = await client.query({
+      query: gql`
+        query {
+          userBizplaces(${gqlBuilder.buildArgs({
+            email: ''
+          })}) {
+            id
+            name
+            description
+            assigned
+          }
+        }
+      `
+    })
+
+    this.userBizplaces = [...response.data.userBizplaces]
+  }
+
+  async _checkUserBelongsDomain() {
+    try {
+      const response = await client.query({
+        query: gql`
+          query {
+            checkUserBelongsDomain
+          }
+        `
+      })
+
+      if (!response.errors) {
+        return response.data.checkUserBelongsDomain
+      }
+    } catch (e) {
+      this._showToast(e)
+    }
+  }
+
   async fetchHandler() {
     const response = await client.query({
       query: gql`
         query {
           tutorialsWithRoles(${gqlBuilder.buildArgs({
-            roleNames: this.roleList.value || []
+            roleNames: this.roleList.value || ''
           })}) {
             id
             name
@@ -225,8 +273,18 @@ class TutorialList extends connect(store)(localize(i18next)(PageView)) {
       })
   }
 
+  getBizplace() {
+    this.userBizplaces
+      .filter(x => x.assigned == true)
+      .map(itm => {
+        this.userBizplace = itm.id
+      })
+  }
+
   stateChanged(state) {
-    if (state.auth.user) this._user = state.auth && state.auth.user && state.auth.user.id
+    if (state.auth.user) {
+      this._user = state.auth && state.auth.user && state.auth.user.id
+    }
   }
 
   //Filter youtube url to get video id
