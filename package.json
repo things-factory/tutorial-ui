@@ -23,11 +23,11 @@
     "migration:revert": "node ./node_modules/typeorm/cli.js migration:revert"
   },
   "dependencies": {
-    "@things-factory/i18n-base": "*",
-    "@things-factory/layout-base": "*",
-    "@things-factory/more-base": "*",
-    "@things-factory/shell": "*",
-    "@things-factory/tutorial-base": "^2.5.0"
+    "@things-factory/i18n-base": "2.x.x",
+    "@things-factory/layout-base": "2.x.x",
+    "@things-factory/more-base": "2.x.x",
+    "@things-factory/shell": "2.x.x",
+    "@things-factory/tutorial-base": "2.x.x"
   },
   "devDependencies": {
     "@things-factory/tester": "*"
